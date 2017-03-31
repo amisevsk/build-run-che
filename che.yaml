@@ -149,8 +149,18 @@ items:
       spec:
         containers:
         - env:
-          - name: JAVA_OPTS
+          - name: "JAVA_OPTS"
             value: "-Xms256M -Xmx256M"
+          - name: "CHE_WORKSPACE_JAVA_OPTIONS"
+            value: "-Xms256m -Xmx512M -Djava.security.egd=file:/dev/./urandom"
+          - name: "CHE_WORKSPACE_MAVEN_OPTIONS"
+            value: "-Xms256m -Xmx512M -Djava.security.egd=file:/dev/./urandom"
+          - name: "CHE_WORKSPACE_AGENT_DEV_MAX__START__TIME__MS"
+            value: "360000"
+          - name: "CHE_WORKSPACE_DEFAULT__MEMORY__MB"
+            value: "512"
+          - name: "CHE_OPENSHIFT_WORKSPACE_MEMORY_OVERRIDE"
+            value: "1300Mi"
           - name: CHE_DOCKER_IP_EXTERNAL
             valueFrom:
               configMapKeyRef:
@@ -210,8 +220,11 @@ items:
               configMapKeyRef:
                 key: che-oauth-github-forceactivation
                 name: che
-          image: rhche/che-server:nightly
+          image: amisevsk/rh-che:openshiftconnector
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 700Mi
           livenessProbe:
             initialDelaySeconds: 120
             tcpSocket:
